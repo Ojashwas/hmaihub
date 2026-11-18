@@ -1,0 +1,23 @@
+{
+  "format": "pptx",
+  "product": "hyperdeck",
+  "extensions": [".pptx"],
+  "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "capabilities": {
+    "detect": { "supported": true, "level": "L0" },
+    "open": { "supported": false },
+    "inspect": { "supported": false },
+    "edit": { "supported": false },
+    "save": { "supported": false },
+    "saveAs": { "supported": false },
+    "templates": { "supported": false }
+  },
+  "roundTripLevel": "none",
+  "macroPreservation": "not-applicable",
+  "encryptionSupport": "unsupported",
+  "digitalSignaturePreservation": "unsupported",
+  "knownLosses": ["Everything beyond format detection; no presentation model exists yet."],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "reaInvestigations": [],
+  "status": "experimental"
+}

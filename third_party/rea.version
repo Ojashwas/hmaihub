@@ -1,0 +1,6 @@
+rea-agents@6.9.0
+source=https://github.com/morluto/rea
+release=https://github.com/morluto/rea/releases/tag/rea-agents-6.9.0
+integrity=sha512-KqDn1UR5BMqHoQ3MGAnPuWiSKwgdFaz1L/uUNgrKt+1W8kPtgYP8AWEOXIF1lDIOBVyPuYIIst2iamo1Wf3r8g==
+license=MIT
+review_status=pending-security-review

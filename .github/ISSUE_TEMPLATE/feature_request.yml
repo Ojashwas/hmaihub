@@ -1,0 +1,19 @@
+name: Feature request
+description: Propose a capability. Approved proposals become PRDs.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed capability
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Office compatibility expectations
+      description: Describe reference behaviour. Compatibility claims require an REA investigation.

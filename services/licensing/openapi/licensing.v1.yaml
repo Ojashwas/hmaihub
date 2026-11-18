@@ -1,0 +1,150 @@
+openapi: 3.1.0
+info:
+  title: HyperOffice Licensing API
+  version: 1.0.0-draft
+  description: |
+    Licensing metadata only. The service never receives document content, formulas,
+    presentation or schedule content, or file names.
+
+    Status: contract draft. The application use cases for activation and renewal are
+    implemented and tested in-process; no HTTP adapter is deployed.
+servers:
+  - url: https://license.hyperoffice.example
+security: []
+paths:
+  /v1/activations:
+    post:
+      operationId: activateLicense
+      summary: One-time online activation; returns a signed licence grant.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "../../../schemas/licensing/activation-request.schema.json" }
+      responses:
+        "201":
+          description: Activated. Retries with the same Idempotency-Key and body return the same result.
+          content:
+            application/json:
+              schema: { $ref: "../../../schemas/licensing/activation-response.schema.json" }
+        "400": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "413": { $ref: "#/components/responses/Error" }
+        "422":
+          description: Generic failure. Unknown, used, expired, and wrong-product codes are indistinguishable.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+  /v1/licenses/{license_id}/renewals:
+    post:
+      operationId: renewLicense
+      summary: Apply a Renewal Code or Feature Code; returns a replacement grant.
+      parameters:
+        - name: license_id
+          in: path
+          required: true
+          schema: { type: string, pattern: "^lic_[0-9A-Za-z]{8,64}$" }
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "../../../schemas/licensing/renewal-request.schema.json" }
+      responses:
+        "200":
+          description: Renewed.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RenewalResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+  /v1/installations/{installation_id}/deactivation:
+    post:
+      operationId: deactivateInstallation
+      summary: "Self-service deactivation (Phase L4, not implemented)."
+      parameters:
+        - name: installation_id
+          in: path
+          required: true
+          schema: { type: string, pattern: "^ins_[0-9A-Za-z]{8,64}$" }
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "501": { $ref: "#/components/responses/Error" }
+  /.well-known/hyperoffice-license-keys.json:
+    get:
+      operationId: getPublicKeySet
+      summary: Public verification keys. Clients also embed trusted keys and never depend on this endpoint alone.
+      responses:
+        "200":
+          description: Key set.
+          content:
+            application/json:
+              schema: { $ref: "../../../schemas/licensing/public-key-set.schema.json" }
+  /health/live:
+    get:
+      operationId: live
+      responses:
+        "200": { description: Process is running. }
+  /health/ready:
+    get:
+      operationId: ready
+      responses:
+        "200": { description: Database and signing dependency reachable. }
+        "503": { description: Not ready. }
+components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, pattern: "^[A-Za-z0-9_-]{16,128}$" }
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required: [error, message, support_reference]
+      properties:
+        error:
+          enum:
+            [
+              INVALID_REQUEST,
+              ACTIVATION_FAILED,
+              RENEWAL_FAILED,
+              RATE_LIMITED,
+              IDEMPOTENCY_CONFLICT,
+              REPLAY_DETECTED,
+              APPROVAL_REQUIRED
+            ]
+        message: { type: string }
+        support_reference: { type: string, pattern: "^HSR-[0-9A-Z]{8,64}$" }
+        retry_after_seconds: { type: integer, minimum: 1 }
+    RenewalResponse:
+      type: object
+      additionalProperties: false
+      required: [license_grant, license_version, previous_expiry, new_expiry, server_time, support_reference]
+      properties:
+        license_grant: { type: string }
+        license_version: { type: integer, minimum: 2 }
+        previous_expiry: { type: string, format: date-time }
+        new_expiry: { type: string, format: date-time }
+        server_time: { type: string, format: date-time }
+        support_reference: { type: string }
+  responses:
+    Error:
+      description: Structured error.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    RateLimited:
+      description: Too many attempts.
+      headers:
+        Retry-After:
+          schema: { type: integer }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }

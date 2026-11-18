@@ -1,0 +1,18 @@
+{
+  "name": "@hyperoffice/licensing-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Licence token schema, strict JWS verification, calendar policies, and activation-code format rules.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./test-vectors": "./test-vectors/keys.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "hyperoffice": {
+    "status": "experimental",
+    "owner": "@hyperoffice/security"
+  }
+}

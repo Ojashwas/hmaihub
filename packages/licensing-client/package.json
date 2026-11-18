@@ -1,0 +1,20 @@
+{
+  "name": "@hyperoffice/licensing-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Client-side licence activation requests, offline validation, clock-rollback defence, device binding, and atomic grant storage.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@hyperoffice/licensing-core": "workspace:*"
+  },
+  "hyperoffice": {
+    "status": "experimental",
+    "owner": "@hyperoffice/security"
+  }
+}

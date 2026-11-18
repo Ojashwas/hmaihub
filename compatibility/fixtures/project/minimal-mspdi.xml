@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project xmlns="http://schemas.microsoft.com/project">
+  <Name>Minimal schedule</Name>
+  <StartDate>2026-11-18T08:00:00</StartDate>
+  <Tasks>
+    <Task><UID>1</UID><ID>1</ID><Name>Design</Name><Duration>PT16H0M0S</Duration></Task>
+    <Task><UID>2</UID><ID>2</ID><Name>تنفيذ</Name><Duration>PT8H0M0S</Duration>
+      <PredecessorLink><PredecessorUID>1</PredecessorUID><Type>1</Type></PredecessorLink>
+    </Task>
+  </Tasks>
+</Project>

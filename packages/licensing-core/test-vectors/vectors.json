@@ -1,0 +1,72 @@
+{
+  "description": "HyperOffice licence-grant test vectors. Test-environment keys only; never trusted by product builds.",
+  "claims": {
+    "iss": "https://license.hyperoffice.example",
+    "aud": "hyperoffice-desktop",
+    "jti": "01JTESTVECTOR00000000000001",
+    "license_id": "lic_01JTESTVECTOR0001",
+    "customer_id": "cus_01JTESTVECTOR0001",
+    "order_id": "ord_01JTESTVECTOR0001",
+    "edition": "professional",
+    "license_mode": "subscription",
+    "products": ["hyperdoc", "hypersheet", "hyperdeck", "hyperplan"],
+    "features": [
+      "documents.edit",
+      "spreadsheets.formulas",
+      "presentations.edit",
+      "projects.schedule",
+      "office.import",
+      "office.export"
+    ],
+    "limits": {
+      "installations": 2,
+      "users": 1,
+      "ai_monthly_credits": 0
+    },
+    "installation_id": "ins_01JTESTVECTOR0001",
+    "device_binding": "sha256:fPgaQG_SbwIa_9wXWZXNoeYZbDvb0f3WSRLhoIXFqI8",
+    "license_version": 1,
+    "policy_version": 1,
+    "iat": 1790000000,
+    "nbf": 1790000000,
+    "exp": 1805638400,
+    "grace_until": 1806848000
+  },
+  "keys": [
+    {
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+      "kid": "ho-license-test-rfc8032-1",
+      "alg": "EdDSA",
+      "use": "sig",
+      "status": "active",
+      "environment": "test"
+    },
+    {
+      "kty": "EC",
+      "x": "5qoSrExHveCEgLeaqGuvddBPf_mmkVCtumLNcJkZoGg",
+      "y": "PEF9LT8fv4dzXRLVEfhUovX3dRJYcAFbxeU0QyvnBjA",
+      "crv": "P-256",
+      "kid": "ho-license-test-es256-1",
+      "alg": "ES256",
+      "use": "sig",
+      "status": "active",
+      "environment": "test"
+    }
+  ],
+  "vectors": [
+    {
+      "id": "eddsa-valid",
+      "alg": "EdDSA",
+      "deterministic": true,
+      "token": "eyJ0eXAiOiJIWVBFUk9GRklDRS1MSUNFTlNFK2p3cyIsImFsZyI6IkVkRFNBIiwia2lkIjoiaG8tbGljZW5zZS10ZXN0LXJmYzgwMzItMSIsInZlciI6MX0.eyJpc3MiOiJodHRwczovL2xpY2Vuc2UuaHlwZXJvZmZpY2UuZXhhbXBsZSIsImF1ZCI6Imh5cGVyb2ZmaWNlLWRlc2t0b3AiLCJqdGkiOiIwMUpURVNUVkVDVE9SMDAwMDAwMDAwMDAwMDEiLCJsaWNlbnNlX2lkIjoibGljXzAxSlRFU1RWRUNUT1IwMDAxIiwiY3VzdG9tZXJfaWQiOiJjdXNfMDFKVEVTVFZFQ1RPUjAwMDEiLCJvcmRlcl9pZCI6Im9yZF8wMUpURVNUVkVDVE9SMDAwMSIsImVkaXRpb24iOiJwcm9mZXNzaW9uYWwiLCJsaWNlbnNlX21vZGUiOiJzdWJzY3JpcHRpb24iLCJwcm9kdWN0cyI6WyJoeXBlcmRvYyIsImh5cGVyc2hlZXQiLCJoeXBlcmRlY2siLCJoeXBlcnBsYW4iXSwiZmVhdHVyZXMiOlsiZG9jdW1lbnRzLmVkaXQiLCJzcHJlYWRzaGVldHMuZm9ybXVsYXMiLCJwcmVzZW50YXRpb25zLmVkaXQiLCJwcm9qZWN0cy5zY2hlZHVsZSIsIm9mZmljZS5pbXBvcnQiLCJvZmZpY2UuZXhwb3J0Il0sImxpbWl0cyI6eyJpbnN0YWxsYXRpb25zIjoyLCJ1c2VycyI6MSwiYWlfbW9udGhseV9jcmVkaXRzIjowfSwiaW5zdGFsbGF0aW9uX2lkIjoiaW5zXzAxSlRFU1RWRUNUT1IwMDAxIiwiZGV2aWNlX2JpbmRpbmciOiJzaGEyNTY6ZlBnYVFHX1Nid0lhXzl3WFdaWE5vZVlaYkR2YjBmM1dTUkxob0lYRnFJOCIsImxpY2Vuc2VfdmVyc2lvbiI6MSwicG9saWN5X3ZlcnNpb24iOjEsImlhdCI6MTc5MDAwMDAwMCwibmJmIjoxNzkwMDAwMDAwLCJleHAiOjE4MDU2Mzg0MDAsImdyYWNlX3VudGlsIjoxODA2ODQ4MDAwfQ.UlhiBY8k5jLckYLjUebCJvHyELeOjWKHSVsuzotolm7BcIKWA7djVa2BnWc8lXPWlSug_UkdvnzKBiQ0dQHEAQ"
+    },
+    {
+      "id": "es256-valid",
+      "alg": "ES256",
+      "deterministic": false,
+      "token": "eyJ0eXAiOiJIWVBFUk9GRklDRS1MSUNFTlNFK2p3cyIsImFsZyI6IkVTMjU2Iiwia2lkIjoiaG8tbGljZW5zZS10ZXN0LWVzMjU2LTEiLCJ2ZXIiOjF9.eyJpc3MiOiJodHRwczovL2xpY2Vuc2UuaHlwZXJvZmZpY2UuZXhhbXBsZSIsImF1ZCI6Imh5cGVyb2ZmaWNlLWRlc2t0b3AiLCJqdGkiOiIwMUpURVNUVkVDVE9SMDAwMDAwMDAwMDAwMDEiLCJsaWNlbnNlX2lkIjoibGljXzAxSlRFU1RWRUNUT1IwMDAxIiwiY3VzdG9tZXJfaWQiOiJjdXNfMDFKVEVTVFZFQ1RPUjAwMDEiLCJvcmRlcl9pZCI6Im9yZF8wMUpURVNUVkVDVE9SMDAwMSIsImVkaXRpb24iOiJwcm9mZXNzaW9uYWwiLCJsaWNlbnNlX21vZGUiOiJzdWJzY3JpcHRpb24iLCJwcm9kdWN0cyI6WyJoeXBlcmRvYyIsImh5cGVyc2hlZXQiLCJoeXBlcmRlY2siLCJoeXBlcnBsYW4iXSwiZmVhdHVyZXMiOlsiZG9jdW1lbnRzLmVkaXQiLCJzcHJlYWRzaGVldHMuZm9ybXVsYXMiLCJwcmVzZW50YXRpb25zLmVkaXQiLCJwcm9qZWN0cy5zY2hlZHVsZSIsIm9mZmljZS5pbXBvcnQiLCJvZmZpY2UuZXhwb3J0Il0sImxpbWl0cyI6eyJpbnN0YWxsYXRpb25zIjoyLCJ1c2VycyI6MSwiYWlfbW9udGhseV9jcmVkaXRzIjowfSwiaW5zdGFsbGF0aW9uX2lkIjoiaW5zXzAxSlRFU1RWRUNUT1IwMDAxIiwiZGV2aWNlX2JpbmRpbmciOiJzaGEyNTY6ZlBnYVFHX1Nid0lhXzl3WFdaWE5vZVlaYkR2YjBmM1dTUkxob0lYRnFJOCIsImxpY2Vuc2VfdmVyc2lvbiI6MSwicG9saWN5X3ZlcnNpb24iOjEsImlhdCI6MTc5MDAwMDAwMCwibmJmIjoxNzkwMDAwMDAwLCJleHAiOjE4MDU2Mzg0MDAsImdyYWNlX3VudGlsIjoxODA2ODQ4MDAwfQ.R6IMvfL8YPIa7sGw49MMob4T-Nco06lxnqlohCgGCwfKXRHSje5HsA-tMZXuYnCZ5xRmwa5F3yiYrm7yIIxE0g"
+    }
+  ]
+}

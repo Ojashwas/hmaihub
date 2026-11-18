@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.hyperoffice.example/licensing/activation-request.schema.json",
+  "title": "POST /v1/activations request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "product",
+    "installation_id",
+    "device_fingerprint",
+    "app_version",
+    "platform",
+    "platform_version",
+    "nonce",
+    "client_time"
+  ],
+  "properties": {
+    "code": { "type": "string", "pattern": "^[A-Za-z0-9 -]{1,80}$" },
+    "product": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" },
+    "installation_id": { "type": "string", "pattern": "^ins_[0-9A-Za-z]{8,64}$" },
+    "device_fingerprint": { "type": "string", "pattern": "^sha256:[A-Za-z0-9_-]{43}$" },
+    "app_version": { "type": "string", "maxLength": 64, "pattern": "^\\d+\\.\\d+\\.\\d+([-+][0-9A-Za-z.-]{1,32})?$" },
+    "platform": { "enum": ["windows", "macos", "linux", "web"] },
+    "platform_version": { "type": "string", "pattern": "^[0-9A-Za-z._ -]{1,32}$" },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{22,128}$",
+      "description": "At least 128 random bits, base64url."
+    },
+    "client_time": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$",
+      "description": "Informational only; never used for licence decisions."
+    }
+  }
+}

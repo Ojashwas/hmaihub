@@ -1,0 +1,27 @@
+{
+  "format": "docm",
+  "product": "hyperdoc",
+  "extensions": [".docm"],
+  "mediaType": "application/vnd.ms-word.document.macroEnabled.12",
+  "capabilities": {
+    "detect": {
+      "supported": true,
+      "level": "L0",
+      "notes": "Detected and flagged MACROS_PRESENT. Macros are never executed."
+    },
+    "open": { "supported": false },
+    "inspect": { "supported": false },
+    "edit": { "supported": false },
+    "save": { "supported": false },
+    "saveAs": { "supported": false },
+    "templates": { "supported": false }
+  },
+  "roundTripLevel": "none",
+  "macroPreservation": "unsupported",
+  "encryptionSupport": "unsupported",
+  "digitalSignaturePreservation": "unsupported",
+  "knownLosses": ["Everything beyond format detection. Preservation mode is planned, not implemented."],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "reaInvestigations": [],
+  "status": "experimental"
+}

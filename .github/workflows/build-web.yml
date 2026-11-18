@@ -1,0 +1,15 @@
+name: Build web
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  not-implemented:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "No web application exists yet (React/Vite shell is Phase 2+)." >&2
+          exit 1

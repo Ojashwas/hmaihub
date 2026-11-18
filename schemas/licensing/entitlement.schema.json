@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.hyperoffice.example/licensing/entitlement.schema.json",
+  "title": "HyperOffice entitlement template",
+  "description": "Server-side template bound to an activation, renewal, or feature code. Feature Code limits are increments.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["template_id", "kind", "edition", "license_mode", "products", "features", "limits"],
+  "properties": {
+    "template_id": { "type": "string", "pattern": "^tpl_[0-9A-Za-z]{4,64}$" },
+    "kind": { "enum": ["activation", "renewal", "feature"] },
+    "edition": {
+      "enum": [
+        "trial",
+        "individual",
+        "professional",
+        "business",
+        "enterprise",
+        "education",
+        "developer",
+        "internal_testing"
+      ]
+    },
+    "license_mode": {
+      "enum": ["subscription", "fixed_term", "perpetual_maintenance", "enterprise_offline", "floating", "development"]
+    },
+    "products": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["hyperoffice-suite", "hyperdoc", "hypersheet", "hyperdeck", "hyperplan", "hyperai", "extension-sdk"]
+      }
+    },
+    "features": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/capabilityId" } },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["installations", "users", "ai_monthly_credits"],
+      "properties": {
+        "installations": { "type": "integer", "minimum": 0 },
+        "users": { "type": "integer", "minimum": 0 },
+        "ai_monthly_credits": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "term": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "length"],
+      "properties": {
+        "unit": { "enum": ["months", "days"] },
+        "length": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "renewal_policy": {
+      "enum": ["max-current-expiry-or-now", "current-expiry", "purchase-date", "activation-date", "co-terminate"]
+    },
+    "contract_start": { "type": "integer", "minimum": 0 },
+    "co_terminate_at": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$",
+      "description": "Stable capability identifier, e.g. documents.edit, hyperplan.earned_value, ai.standard."
+    }
+  }
+}

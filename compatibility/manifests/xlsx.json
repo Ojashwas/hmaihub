@@ -1,0 +1,23 @@
+{
+  "format": "xlsx",
+  "product": "hypersheet",
+  "extensions": [".xlsx"],
+  "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "capabilities": {
+    "detect": { "supported": true, "level": "L0" },
+    "open": { "supported": false },
+    "inspect": { "supported": false },
+    "edit": { "supported": false },
+    "save": { "supported": false },
+    "saveAs": { "supported": false },
+    "templates": { "supported": false }
+  },
+  "roundTripLevel": "none",
+  "macroPreservation": "not-applicable",
+  "encryptionSupport": "unsupported",
+  "digitalSignaturePreservation": "unsupported",
+  "knownLosses": ["Everything beyond format detection; no workbook model or formula engine exists yet."],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "reaInvestigations": [],
+  "status": "experimental"
+}

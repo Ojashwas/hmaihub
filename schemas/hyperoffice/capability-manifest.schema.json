@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.hyperoffice.example/hyperoffice/capability-manifest.schema.json",
+  "title": "HyperOffice file-format capability manifest",
+  "description": "Machine-readable support claim for one file format. Levels: L0 detect, L1 inspect, L2 read model, L3 edit subset, L4 save/reopen in HyperOffice, L5 round-trip tested with Microsoft Office, L6 high-fidelity interoperability.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "product",
+    "extensions",
+    "mediaType",
+    "capabilities",
+    "roundTripLevel",
+    "macroPreservation",
+    "encryptionSupport",
+    "digitalSignaturePreservation",
+    "knownLosses",
+    "testCoverage",
+    "reaInvestigations",
+    "status"
+  ],
+  "properties": {
+    "format": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "product": { "enum": ["hyperdoc", "hypersheet", "hyperdeck", "hyperplan"] },
+    "extensions": { "type": "array", "items": { "type": "string", "pattern": "^\\.[a-z0-9]+$" }, "minItems": 1 },
+    "mediaType": { "type": "string" },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["detect", "open", "inspect", "edit", "save", "saveAs", "templates"],
+      "properties": {
+        "detect": { "$ref": "#/$defs/capability" },
+        "open": { "$ref": "#/$defs/capability" },
+        "inspect": { "$ref": "#/$defs/capability" },
+        "edit": { "$ref": "#/$defs/capability" },
+        "save": { "$ref": "#/$defs/capability" },
+        "saveAs": { "$ref": "#/$defs/capability" },
+        "templates": { "$ref": "#/$defs/capability" }
+      }
+    },
+    "roundTripLevel": { "$ref": "#/$defs/level" },
+    "macroPreservation": { "enum": ["not-applicable", "unsupported", "preserve-without-execution"] },
+    "encryptionSupport": { "enum": ["unsupported", "detect-only", "decrypt-with-password"] },
+    "digitalSignaturePreservation": { "enum": ["unsupported", "detect-only", "preserve-and-invalidate-on-edit"] },
+    "knownLosses": { "type": "array", "items": { "type": "string" } },
+    "testCoverage": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Test files or suites providing evidence for the claimed level."
+    },
+    "reaInvestigations": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^research/rea/investigations/" },
+      "description": "Required (non-empty) for L5 and L6."
+    },
+    "compatibilityReport": { "type": "string" },
+    "status": { "enum": ["experimental", "preview", "stable", "deprecated"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "roundTripLevel": { "enum": ["L5", "L6"] } } },
+      "then": {
+        "required": ["compatibilityReport"],
+        "properties": {
+          "compatibilityReport": { "type": "string", "minLength": 1 },
+          "reaInvestigations": { "type": "array", "minItems": 1 },
+          "testCoverage": { "type": "array", "minItems": 1 }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "level": { "enum": ["none", "L0", "L1", "L2", "L3", "L4", "L5", "L6"] },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported"],
+      "properties": {
+        "supported": { "type": "boolean" },
+        "level": { "$ref": "#/$defs/level" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

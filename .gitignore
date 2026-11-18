@@ -1,0 +1,17 @@
+node_modules/
+dist/
+target/
+.turbo/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+
+# Local development signing keys are generated per machine and must never be committed.
+.dev-keys/
+*.pem
+*.key
+*.pfx
+*.p12
+.env
+.env.*

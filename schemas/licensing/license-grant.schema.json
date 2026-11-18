@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.hyperoffice.example/licensing/license-grant.schema.json",
+  "title": "HyperOffice licence grant (JWS payload)",
+  "description": "Payload of a compact JWS with protected header {typ: HYPEROFFICE-LICENSE+jws, alg: EdDSA|ES256, kid, ver: 1}. Must stay in sync with parseGrantClaims in @hyperoffice/licensing-core.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "iss",
+    "aud",
+    "jti",
+    "license_id",
+    "customer_id",
+    "edition",
+    "license_mode",
+    "products",
+    "features",
+    "limits",
+    "installation_id",
+    "device_binding",
+    "license_version",
+    "policy_version",
+    "iat",
+    "nbf",
+    "exp",
+    "grace_until"
+  ],
+  "properties": {
+    "iss": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "aud": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "jti": { "type": "string", "pattern": "^[0-9A-Za-z_-]{8,128}$" },
+    "license_id": { "type": "string", "pattern": "^lic_[0-9A-Za-z]{8,64}$" },
+    "customer_id": { "type": "string", "pattern": "^cus_[0-9A-Za-z]{8,64}$" },
+    "order_id": { "type": "string", "pattern": "^ord_[0-9A-Za-z]{8,64}$" },
+    "edition": {
+      "enum": [
+        "trial",
+        "individual",
+        "professional",
+        "business",
+        "enterprise",
+        "education",
+        "developer",
+        "internal_testing"
+      ]
+    },
+    "license_mode": {
+      "enum": ["subscription", "fixed_term", "perpetual_maintenance", "enterprise_offline", "floating", "development"]
+    },
+    "products": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$" }
+    },
+    "features": {
+      "type": "array",
+      "maxItems": 512,
+      "uniqueItems": true,
+      "items": { "$ref": "entitlement.schema.json#/$defs/capabilityId" }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["installations", "users", "ai_monthly_credits"],
+      "properties": {
+        "installations": { "type": "integer", "minimum": 1 },
+        "users": { "type": "integer", "minimum": 1 },
+        "ai_monthly_credits": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "installation_id": { "type": "string", "pattern": "^ins_[0-9A-Za-z]{8,64}$" },
+    "device_binding": { "type": "string", "pattern": "^sha256:[A-Za-z0-9_-]{43}$" },
+    "license_version": { "type": "integer", "minimum": 1 },
+    "policy_version": { "const": 1 },
+    "iat": { "$ref": "#/$defs/epochSeconds" },
+    "nbf": { "$ref": "#/$defs/epochSeconds" },
+    "exp": { "$ref": "#/$defs/epochSeconds" },
+    "grace_until": { "$ref": "#/$defs/epochSeconds" },
+    "maintenance_until": { "$ref": "#/$defs/epochSeconds" }
+  },
+  "$defs": {
+    "epochSeconds": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+  }
+}

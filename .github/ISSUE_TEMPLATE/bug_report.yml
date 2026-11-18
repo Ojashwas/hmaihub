@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a defect. Do not report security vulnerabilities here; see SECURITY.md.
+labels: [bug]
+body:
+  - type: dropdown
+    id: product
+    attributes:
+      label: Product
+      options: [HyperDoc, HyperSheet, HyperDeck, HyperPlan, HyperAI, HyperWorkspace, Licensing, Tooling]
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Attach a minimal, sanitized file. Never attach confidential documents.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behaviour
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit

@@ -1,0 +1,12 @@
+# Owners are placeholders until teams are created.
+*                                   @hyperoffice/maintainers
+/packages/licensing-*/              @hyperoffice/security
+/packages/entitlement-sdk/          @hyperoffice/security
+/services/licensing/                @hyperoffice/security
+/schemas/licensing/                 @hyperoffice/security
+/docs/licensing/                    @hyperoffice/security
+/tools/format-detector/             @hyperoffice/parsers @hyperoffice/security
+/compatibility/manifests/           @hyperoffice/compatibility
+/research/rea/                      @hyperoffice/compatibility
+/third_party/                       @hyperoffice/security
+/.github/workflows/                 @hyperoffice/maintainers @hyperoffice/security

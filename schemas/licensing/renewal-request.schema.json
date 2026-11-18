@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.hyperoffice.example/licensing/renewal-request.schema.json",
+  "title": "POST /v1/licenses/{license_id}/renewals request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "extension_code",
+    "current_license_grant",
+    "installation_id",
+    "device_fingerprint",
+    "nonce",
+    "client_time"
+  ],
+  "properties": {
+    "extension_code": { "type": "string", "pattern": "^[A-Za-z0-9 -]{1,80}$" },
+    "current_license_grant": {
+      "type": "string",
+      "maxLength": 16384,
+      "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+      "description": "May be expired; only authenticity and binding are checked."
+    },
+    "installation_id": { "type": "string", "pattern": "^ins_[0-9A-Za-z]{8,64}$" },
+    "device_fingerprint": { "type": "string", "pattern": "^sha256:[A-Za-z0-9_-]{43}$" },
+    "nonce": { "type": "string", "pattern": "^[A-Za-z0-9_-]{22,128}$" },
+    "client_time": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "format": "mspdi",
+  "product": "hyperplan",
+  "extensions": [".xml"],
+  "mediaType": "application/xml",
+  "capabilities": {
+    "detect": {
+      "supported": true,
+      "level": "L0",
+      "notes": "Root <Project> element in the http://schemas.microsoft.com/project namespace."
+    },
+    "open": { "supported": false },
+    "inspect": { "supported": false },
+    "edit": { "supported": false },
+    "save": { "supported": false },
+    "saveAs": { "supported": false },
+    "templates": { "supported": false }
+  },
+  "roundTripLevel": "none",
+  "macroPreservation": "not-applicable",
+  "encryptionSupport": "unsupported",
+  "digitalSignaturePreservation": "unsupported",
+  "knownLosses": [
+    "Everything beyond format detection; no scheduling engine exists yet. MPP is not detected beyond the OLE container."
+  ],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "reaInvestigations": [],
+  "status": "experimental"
+}
