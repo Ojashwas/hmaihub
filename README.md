@@ -33,6 +33,9 @@ L5 round-trip tested with Microsoft Office · L6 high-fidelity. No format is abo
 
 ## Architecture
 
+Full documentation index (installation, user guides, architecture, technical
+design, functional specification, licensing): [docs/README.md](docs/README.md).
+
 See [docs/architecture/target-state.md](docs/architecture/target-state.md),
 [current-state.md](docs/architecture/current-state.md),
 [gap-analysis.md](docs/architecture/gap-analysis.md), and the
