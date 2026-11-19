@@ -1,10 +1,57 @@
 # Pending work and handover checklist
 
-Last updated: 2026-11-19 · Branch `architecture/hyperoffice-foundation` · Latest commit `cbb1ffb`
+Last updated: 2026-11-19 · Branch `architecture/hyperoffice-foundation` · Latest commit `4569fcd`
 (not pushed to any remote).
 
 Use this file to continue on another machine. Tick items as you complete them and
 commit the updated file.
+
+---
+
+## 0. Read this first
+
+### What exists
+
+| Area | Location | State |
+| --- | --- | --- |
+| Five desktop apps | `apps/hyperoffice`, `apps/hyperdoc`, `apps/hypersheet`, `apps/hyperdeck`, `apps/hyperplan` | Preview editors, working subset of each format |
+| Shared app UI | `apps/shell` | Toolbar, menus, file commands, product catalogue |
+| Electron host + packaging | `apps/desktop` | Builds one installer per app into `exe/` |
+| File formats, formulas, scheduler | `packages/office-formats` | DOCX/XLSX/PPTX/MSPDI subset, 21 functions, critical path |
+| Format detection | `tools/format-detector` | L0 detection with hostile-file limits |
+| Licensing | `packages/licensing-*`, `packages/entitlement-sdk`, `services/licensing` | Design + logic with development keys only; not wired into apps |
+| Documentation | `docs/` | Start at [README.md](README.md) |
+
+### Rules to keep (agreed during development)
+
+1. **Do not bypass security controls.** If antivirus flags a file, stop and get a security review. No exclusions or disabling protection without approval.
+2. **Do not reverse-engineer Microsoft Office binaries.** Work from public specifications (ECMA-376, MS-OI29500, MSPDI). REA (`rea-agents@6.9.0`) is only for authorised investigations recorded under `research/rea/investigations/`.
+3. **No compatibility claim above L4** in `compatibility/manifests/*.json` without an REA investigation and a reviewed report. The schema test enforces this.
+4. **No production signing keys** in the repository or on developer machines. Development keys live in `.dev-keys/` (git-ignored).
+5. **Report only what was actually run.** Update `docs/test-report.md` with real results.
+6. **Customer files are never held hostage**: open, copy, and export must always work, whatever the licence state.
+7. Commit after each completed item with a Conventional Commit message (`feat(...)`, `fix(...)`, `docs(...)`, `test(...)`).
+
+### Machine-specific lessons from the first machine
+
+- Corporate TLS inspection broke downloads from GitHub: use `$env:NODE_OPTIONS = "--use-system-ca"`. The npm registry worked without it.
+- pnpm 12 approves dependency build scripts through `allowBuilds:` in `pnpm-workspace.yaml` (already configured for `electron`, `esbuild`).
+- Electron 45 downloads its runtime on first use (`require("electron")`), not during install.
+- When filtering test output in PowerShell, use `node --test --test-reporter=tap …`; the default reporter uses Unicode symbols.
+- Tests run TypeScript directly with Node 26 (`node --test "tests/**/*.test.ts"`); there is no compile step except for the desktop bundle (`apps/desktop/scripts/build.ts`).
+
+### Prompt for an AI coding assistant on the new machine
+
+Copy this into the assistant (for example GitHub Copilot agent mode) with the repository open:
+
+> Read `docs/pending.md` in full and follow its rules in section 0. Work through
+> sections 1–8 in order, then the task cards in section 9 in the order given by
+> "Suggested order". Before each task, read the files listed in its card. After
+> each task, run `pnpm check`, update the checkboxes and status in
+> `docs/pending.md`, update `docs/test-report.md` with real results, and commit.
+> Stop and ask me if antivirus blocks anything, if a task needs credentials,
+> certificates, a licensed Microsoft Office installation, or legal/security
+> approval, or if a result contradicts this file.
 
 ---
 
@@ -194,6 +241,94 @@ Status key: ☐ open · ◐ partly done
 Full backlogs: [architecture/backlog.md](architecture/backlog.md) ·
 [licensing/implementation-backlog.md](licensing/implementation-backlog.md) ·
 [architecture/gap-analysis.md](architecture/gap-analysis.md).
+
+### Suggested order
+
+1. P-04 → P-02 → P-01 (or P-07 if building in CI) → P-19
+2. P-03 (needs licensed Office) → P-05 (needs authorisation) → update manifests
+3. P-08 → P-09
+4. P-12 decision, then P-11 or P-06
+5. P-14, P-15, P-18 (feature work)
+6. P-10, P-20 (licensing backend), P-16, P-17 (legal), P-13
+
+### Task cards
+
+#### P-01 Build the five Windows installers
+- Depends on: P-04 cleared, P-02 passed.
+- Read: `apps/desktop/scripts/package.ts`, `apps/desktop/README.md`.
+- Steps: §6.
+- Done when: five `*-Setup-0.1.0.exe` files exist in `exe/`, each installs and launches (§8), and `exe/README.md` status line is updated.
+
+#### P-02 Extended smoke test
+- Read: `apps/desktop/src/main/main.ts` (`runSmokeTest`), `apps/desktop/src/main/smoke-models.ts`, `apps/desktop/scripts/smoke.ts`.
+- Steps: §5.
+- If it fails with "editor round-trip changed the model", compare the printed model with `SMOKE_MODELS` and fix the DOM ↔ model code in `apps/<app>/src/editor/*`. If "file round-trip" fails, fix `packages/office-formats/src/<format>.ts` and add a unit test there.
+- Done when: `SMOKE OK … round-trips passed`; result recorded in `docs/test-report.md`.
+
+#### P-03 Validate saved files in Microsoft Office
+- Needs: a machine with licensed Word, Excel, PowerPoint, Project.
+- Steps: create files with each app (§8), open them in the Office app, note anything repaired, missing, or wrong. PowerPoint is the highest risk (generated master/layout/theme in `packages/office-formats/src/pptx.ts` have never been opened by PowerPoint).
+- Fix defects in `packages/office-formats/src/*.ts` with a unit test for each.
+- Done when: every format opens without a repair prompt, findings recorded in `docs/test-report.md`. Do **not** raise manifests above L4 yet (that needs P-05).
+
+#### P-04 Defender detection review
+- Evidence: `Trojan:Win32/Cinjo.O!cl` on `node_modules\.pnpm\electron@45.4.1…\electron\dist\electron.exe`, 2026-11-19, original machine.
+- Steps: give the evidence to the security team; they decide on a Microsoft false-positive submission or an approved exception. Alternative: a newer Electron release they approve (update `apps/desktop/package.json`, `pnpm-workspace.yaml` `minimumReleaseAgeExclude`, ADR-0006).
+- Done when: written approval exists, or the decision is to use CI (P-07) or Tauri (P-12).
+
+#### P-05 REA investigations
+- Read: `research/rea/README.md`, `docs/research/rea-version.md`.
+- Needs: written authorisation (`authorization.md`), licensed reference Office, a named approver.
+- Steps: one narrow investigation per product (for example `HDOC-PARA-001` paragraph styles, `HSHEET-FORMULA-001` SUM/IF caching, `HDECK-SLIDE-001` minimal slide package, `HPLAN-DEPENDENCY-001` FS links) following the 11-step workflow; link each to a test in `packages/office-formats/tests`.
+- Done when: investigations are approved and committed; only then update `compatibility/manifests/*.json` (`reaInvestigations`, `compatibilityReport`, `roundTripLevel`).
+
+#### P-06 Code signing
+- Needs: an Authenticode code-signing certificate (organisation-owned; never committed).
+- Steps: add electron-builder `win.signtoolOptions` / Azure Trusted Signing to `apps/desktop/scripts/package.ts` reading credentials from the environment or a secure store; sign in CI with secrets held by the security team; update `release.yml` to publish only signed artefacts with an SBOM.
+- Done when: installers show the publisher name, SmartScreen reputation established.
+
+#### P-07 Push and run CI
+- Steps: §7. Fix any workflow failures (first run of `ci.yml`, `test.yml`, `security.yml`, `build-desktop.yml`).
+- Done when: all workflows green on the branch; open a pull request to `main` using `.github/PULL_REQUEST_TEMPLATE.md`.
+
+#### P-08 Enforce licensing in the apps
+- Read: `packages/entitlement-sdk/README.md`, `packages/licensing-client/README.md`, `docs/licensing/local-verification.md`, `docs/licensing/feature-entitlements.md`.
+- Steps: in `apps/desktop/src/main`, load the stored grant, validate with `validateInstalledLicense`, pass a `LicenseSnapshot` to the renderer; in each app call `entitlements.require("documents.edit")` etc. before editing; show licence status in the status bar; add an Activate dialog that accepts a development grant from `tools/development-license-issuer`.
+- Keep: open/copy/export always allowed (rule 6).
+- Done when: unlicensed or expired → editing paused, files still open and export; tests cover both.
+
+#### P-09 Secure storage
+- Implement `SecureStore` adapters (Windows DPAPI via Electron `safeStorage`, macOS Keychain, Linux Secret Service) in the desktop main process; atomic write (temp + rename). Replace `MemorySecureStore` in product builds.
+
+#### P-10 Licensing backend
+- Decide ADR-0005 (backend framework). Then: HTTP adapter for `services/licensing` matching `openapi/licensing.v1.yaml`, PostgreSQL repository applying `migrations/0001_initial.sql`, Azure Key Vault signer (ADR-0103), shared rate limiter. Do not issue production codes before P-20.
+
+#### P-11 Rust toolchain
+- Install rustup (stable), `cargo-nextest`, `cargo-deny`, `cargo-audit`; create `Cargo.toml` workspace and `crates/office-package`; port the tests in `tools/format-detector/tests/detect.test.ts`.
+
+#### P-12 Electron vs Tauri
+- Compare installer size, Defender behaviour, security model, and effort; record the decision in a new ADR (supersede ADR-0006 if switching).
+
+#### P-13 macOS / Linux packages
+- Add `mac` (dmg, notarisation) and `linux` (AppImage/deb) targets to `package.ts`; requires the respective build machines and an Apple Developer ID.
+
+#### P-14 Broader format support
+- Pick items from the `knownLosses` lists in `compatibility/manifests/*.json`. For each: model change in `packages/office-formats/src/models.ts`, reader + writer + tests, editor UI in `apps/<app>`, manifest update.
+
+#### P-15 Package-inspection CLI
+- Build `hyperoffice inspect|validate|normalize|diff` on `tools/format-detector` and `packages/office-formats`; see `docs/architecture/backlog.md` P1-002…P1-005.
+
+#### P-16 / P-17 Legal and language
+- Arabic and English licensing disclosures (qualified translator + legal sign-off); outbound licence decision for `LICENSE`.
+
+#### P-18 Accessibility
+- Add axe-core checks to the smoke test windows; manual NVDA/Narrator pass on each app; fix keyboard traps and missing labels.
+
+#### P-19 Test report
+- After §4–§8, rewrite `docs/test-report.md` with date, commit, environment, per-package counts, smoke result, Office validation findings.
+
+#### P-20 Licensing security review
+- Follow `docs/licensing/security-test-plan.md`; external penetration test; no open critical/high findings before production.
 
 ## 10. Troubleshooting
 
