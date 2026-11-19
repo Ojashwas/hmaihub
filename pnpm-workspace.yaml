@@ -1,7 +1,9 @@
 packages:
+  - "apps/*"
   - "packages/*"
   - "services/*"
   - "tools/*"
+
 minimumReleaseAgeExclude:
   - "@turbo/darwin-64@2.11.12"
   - "@turbo/darwin-arm64@2.11.12"
@@ -10,3 +12,9 @@ minimumReleaseAgeExclude:
   - "@turbo/windows-64@2.11.12"
   - "@turbo/windows-arm64@2.11.12"
   - turbo@2.11.12
+  - electron@45.4.1
+allowBuilds:
+  electron: true
+  esbuild: true
+  # Squirrel installer support; HyperOffice packages with NSIS only.
+  electron-winstaller: false

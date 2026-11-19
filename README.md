@@ -6,16 +6,19 @@ HyperAI, and the HyperWorkspace shell.
 
 ## Project status
 
-**Phase 0 (foundation), pre-alpha.** No editor application exists yet. Do not
-use HyperOffice for real documents.
+**Pre-alpha preview.** Four preview editors and a suite launcher exist as an
+Electron desktop app ([apps/desktop](apps/desktop/README.md)). They handle a
+documented subset of each format. Do not use HyperOffice for real documents.
 
 | Area | State |
 | --- | --- |
 | Monorepo, CI, ADRs, governance | In place |
 | Format detection (L0) | Implemented in `tools/format-detector` |
+| Preview engines (TypeScript) | `packages/office-formats`: DOCX/XLSX/PPTX/MSPDI subset, formula engine, CPM scheduler |
+| Desktop apps | HyperOffice launcher, HyperDoc, HyperSheet, HyperDeck, HyperPlan (Electron preview, [ADR-0006](docs/architecture/decisions/0006-electron-desktop-preview.md)) |
+| Windows installers | Build scripts and CI workflow ready; not built locally (see below) |
 | Document engines (Rust) | Not started; Rust toolchain not provisioned ([ADR-0003](docs/architecture/decisions/0003-rust-engines-deferred.md)) |
-| Applications | Not started |
-| Licensing | L0 design + L1 implementation with development keys only |
+| Licensing | L0 design + L1 implementation with development keys only; not enforced in the preview apps |
 
 ## Supported formats
 
@@ -23,13 +26,15 @@ Machine-readable claims live in [compatibility/manifests/](compatibility/manifes
 
 | Format | Level | Meaning |
 | --- | --- | --- |
-| DOCX, DOCM | L0 | Detect only |
-| XLSX | L0 | Detect only |
-| PPTX | L0 | Detect only |
-| Microsoft Project XML (MSPDI) | L0 | Detect only |
+| DOCX | L4 | Subset opens, edits, saves, and reopens in HyperDoc |
+| DOCM | L3 | Opens with a warning; saved only as macro-free DOCX |
+| XLSX | L4 | Subset opens, edits, saves, and reopens in HyperSheet |
+| PPTX | L4 | Subset opens, edits, saves, and reopens in HyperDeck |
+| Microsoft Project XML (MSPDI) | L4 | Subset opens, edits, saves, and reopens in HyperPlan |
 
 Levels: L0 detect · L1 inspect · L2 read model · L3 edit subset · L4 save/reopen ·
-L5 round-trip tested with Microsoft Office · L6 high-fidelity. No format is above L0.
+L5 round-trip tested with Microsoft Office · L6 high-fidelity. Nothing is claimed at
+L5 or above; files written by HyperOffice have not been validated in Microsoft Office.
 
 ## Architecture
 

@@ -9,10 +9,13 @@
       "level": "L0",
       "notes": "Detected and flagged MACROS_PRESENT. Macros are never executed."
     },
-    "open": { "supported": false },
-    "inspect": { "supported": false },
-    "edit": { "supported": false },
-    "save": { "supported": false },
+    "open": { "supported": true, "level": "L2", "notes": "Opened with a warning; macros are not loaded or executed." },
+    "inspect": { "supported": true, "level": "L1" },
+    "edit": { "supported": true, "level": "L3" },
+    "save": {
+      "supported": false,
+      "notes": "Never overwritten; saving always produces a macro-free .docx via Save As."
+    },
     "saveAs": { "supported": false },
     "templates": { "supported": false }
   },
@@ -20,8 +23,8 @@
   "macroPreservation": "unsupported",
   "encryptionSupport": "unsupported",
   "digitalSignaturePreservation": "unsupported",
-  "knownLosses": ["Everything beyond format detection. Preservation mode is planned, not implemented."],
-  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "knownLosses": ["VBA macros are dropped when saving as .docx (the user is warned)", "All losses listed for DOCX"],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts", "packages/office-formats/tests/formats.test.ts"],
   "reaInvestigations": [],
   "status": "experimental"
 }

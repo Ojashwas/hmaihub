@@ -13,6 +13,7 @@ and still subject to the security review gates in [ROADMAP.md](../../../ROADMAP.
 | [0003](0003-rust-engines-deferred.md) | Rust core engines deferred until the toolchain is provisioned | Accepted |
 | [0004](0004-rea-as-pinned-external-tool.md) | REA as a pinned external npm tool | Accepted |
 | [0005](0005-backend-framework.md) | Backend framework default | Proposed |
+| [0006](0006-electron-desktop-preview.md) | Electron for the desktop preview | Accepted (preview only) |
 
 ## Licensing
 

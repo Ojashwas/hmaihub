@@ -1,20 +1,21 @@
 # HyperOffice documentation
 
-Status as of 2026-11-18, commit `392d896` on branch `architecture/hyperoffice-foundation`.
+Status as of 2026-11-19 on branch `architecture/hyperoffice-foundation`.
 
 ## Is there an installable application or EXE?
 
-**No.** No `.exe`, `.msi`, installer, desktop app, or web app has been produced.
-The repository currently contains:
+**The apps exist; the installers are not yet built.** The desktop preview
+(`apps/desktop`) contains five products — the HyperOffice launcher, HyperDoc,
+HyperSheet, HyperDeck, and HyperPlan — and a script that produces one Windows
+installer per product (`HyperDoc-Setup-0.1.0.exe`, …).
 
-- the monorepo foundation (tooling, CI definitions, governance);
-- two command-line tools that run with Node.js (`format-detector`, `development-license-issuer`);
-- licensing libraries and the licensing service's business logic (no HTTP server, no database);
-- design and planning documents.
+The installers could not be built on the development workstation: Microsoft
+Defender flags the official Electron 45.4.1 runtime as `Trojan:Win32/Cinjo.O!cl`
+and blocks it. The detection was not bypassed. Options are in
+[Installation Guide § Desktop preview installers](installation-guide.md#desktop-preview-installers).
 
-Everything is installed and run from source with Node.js and pnpm. See the
-[Installation Guide](installation-guide.md). How an EXE will be produced later is
-described in [Installation Guide § Packaging](installation-guide.md#packaging-and-executables).
+The repository also contains the CLI tools, licensing libraries, the licensing
+service's business logic, and the documents below.
 
 ## Document map
 

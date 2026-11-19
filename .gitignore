@@ -7,6 +7,13 @@ coverage/
 .DS_Store
 Thumbs.db
 
+# Desktop packaging intermediates and installers
+apps/desktop/.stage/
+apps/desktop/build/
+release/
+*.exe
+*.blockmap
+
 # Local development signing keys are generated per machine and must never be committed.
 .dev-keys/
 *.pem

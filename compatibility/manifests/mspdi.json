@@ -9,21 +9,32 @@
       "level": "L0",
       "notes": "Root <Project> element in the http://schemas.microsoft.com/project namespace."
     },
-    "open": { "supported": false },
-    "inspect": { "supported": false },
-    "edit": { "supported": false },
-    "save": { "supported": false },
-    "saveAs": { "supported": false },
+    "open": {
+      "supported": true,
+      "level": "L2",
+      "notes": "Tasks, durations, finish-to-start links, project name and start date."
+    },
+    "inspect": { "supported": true, "level": "L1" },
+    "edit": { "supported": true, "level": "L3", "notes": "Critical-path schedule on a Monday–Friday calendar." },
+    "save": { "supported": true, "level": "L4" },
+    "saveAs": { "supported": true, "level": "L4" },
     "templates": { "supported": false }
   },
-  "roundTripLevel": "none",
+  "roundTripLevel": "L4",
   "macroPreservation": "not-applicable",
   "encryptionSupport": "unsupported",
   "digitalSignaturePreservation": "unsupported",
   "knownLosses": [
-    "Everything beyond format detection; no scheduling engine exists yet. MPP is not detected beyond the OLE container."
+    "Resources, assignments, costs, baselines, custom fields, calendars and exceptions",
+    "SS/FF/SF links (treated as FS), lag and lead, constraints, summary-task hierarchy",
+    "MPP files are not supported",
+    "Not validated against Microsoft Project (L5 requires an REA investigation)"
   ],
-  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "testCoverage": [
+    "tools/format-detector/tests/detect.test.ts",
+    "packages/office-formats/tests/formats.test.ts",
+    "packages/office-formats/tests/engines.test.ts"
+  ],
   "reaInvestigations": [],
   "status": "experimental"
 }

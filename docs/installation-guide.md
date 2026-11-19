@@ -123,16 +123,71 @@ Delete the repository folder. If you ran the development issuer outside the
 repo, also delete that `.dev-keys` folder. If you installed pnpm globally:
 `npm uninstall --global pnpm`.
 
+## Desktop preview installers
+
+### Build them
+
+```powershell
+$env:NODE_OPTIONS = "--use-system-ca"            # only behind a TLS-inspecting proxy
+pnpm install
+pnpm --filter @hyperoffice/desktop smoke          # opens all 5 windows headlessly, round-trips every editor
+pnpm --filter @hyperoffice/desktop package        # all products
+pnpm --filter @hyperoffice/desktop package hyperdoc hypersheet   # selected products
+```
+
+Output (default `%USERPROFILE%\HyperOffice-release`, override with `HYPEROFFICE_RELEASE_DIR`):
+
+```
+HyperOffice-release\suite\HyperOffice-Setup-0.1.0.exe
+HyperOffice-release\hyperdoc\HyperDoc-Setup-0.1.0.exe
+HyperOffice-release\hypersheet\HyperSheet-Setup-0.1.0.exe
+HyperOffice-release\hyperdeck\HyperDeck-Setup-0.1.0.exe
+HyperOffice-release\hyperplan\HyperPlan-Setup-0.1.0.exe
+```
+
+Each installer is per-user (no administrator rights), lets the user choose the
+folder, and creates Start-menu and desktop shortcuts. HyperDoc, HyperSheet, and
+HyperDeck register their file types; HyperPlan does not claim `.xml`.
+
+The GitHub Actions workflow `build-desktop.yml` runs the tests, the smoke test,
+and the packaging on `windows-latest`, and uploads the installers as the
+`hyperoffice-preview-installers` artifact.
+
+### Current blocker on the development workstation
+
+Microsoft Defender detected the official Electron 45.4.1 runtime
+(`node_modules\.pnpm\electron@45.4.1…\electron\dist\electron.exe`) as
+`Trojan:Win32/Cinjo.O!cl` on 2026-11-19 and blocks every read of the file. The
+`!cl` suffix indicates a cloud machine-learning verdict. Nothing was excluded,
+disabled, or bypassed. To proceed, choose one:
+
+1. Ask your security team to review the detection and, if they confirm a false
+   positive, submit it to Microsoft and restore/allow the file.
+2. Build in CI (the workflow above) and have the installers scanned before use.
+3. Switch the shell to Tauri 2 (uses the system WebView2 and a small native
+   executable); requires Rust and the MSVC build tools.
+
+The first smoke test ran successfully before the detection (all five windows
+loaded without renderer errors). The extended smoke test with editor round-trips
+has not run yet because of the block.
+
+### Install a built installer
+
+1. Run `HyperDoc-Setup-0.1.0.exe` (or another product).
+2. SmartScreen warns because preview installers are **unsigned**: choose
+   *More info → Run anyway* only if the file came from your own build or CI.
+3. Choose the install folder and finish. Start the app from the Start menu.
+4. Uninstall from *Settings → Apps → Installed apps*.
+
 ## Packaging and executables
 
-Not available yet. Planned approach:
+| Deliverable | Technology | Status |
+| --- | --- | --- |
+| Windows installers for the 5 desktop products | Electron + electron-builder NSIS | Scripts ready; blocked locally by Defender; CI workflow ready |
+| Code signing, signed updates | Authenticode certificate | Not started (required before distribution) |
+| macOS / Linux packages | electron-builder dmg / AppImage / deb | Not configured |
+| Production desktop shell | Tauri 2 (target per ADR-0001) | Revisit before first production release |
+| Web app | React + Vite static build | Not started |
+| Licensing service | Container image on Azure | Not started |
 
-| Deliverable | Planned technology | Phase | Prerequisite |
-| --- | --- | --- | --- |
-| Desktop app (Windows `.msi`/`.exe`, macOS `.dmg`, Linux packages) | Tauri 2 bundler, code-signed, signed updates | 2+ | Editor vertical slice, ADR on desktop shell |
-| Web app | React + Vite static build | 2+ | Editor vertical slice |
-| Stand-alone CLI (`hyperoffice.exe`) | Node.js single-executable application or Rust binary | 1 | Package inspection CLI, bundling step |
-| Licensing service | Container image on Azure Container Apps / App Service | L2–L5 | HTTP adapter, PostgreSQL, Key Vault signer |
-
-The `release.yml` and `build-desktop.yml` workflows deliberately fail until
-these exist, so no unsigned or empty artefact can be published.
+`release.yml` still refuses to publish: there is no signing or provenance yet.

@@ -9,19 +9,33 @@
       "level": "L0",
       "notes": "Content-based via officeDocument relationship and main-part content type."
     },
-    "open": { "supported": false },
-    "inspect": { "supported": false },
-    "edit": { "supported": false },
-    "save": { "supported": false },
-    "saveAs": { "supported": false },
+    "open": {
+      "supported": true,
+      "level": "L2",
+      "notes": "Paragraphs, Title/Heading 1/Heading 2 styles, bold/italic/underline, alignment, RTL, tabs, line breaks."
+    },
+    "inspect": { "supported": true, "level": "L1", "notes": "Unsupported content is listed when the file is opened." },
+    "edit": { "supported": true, "level": "L3" },
+    "save": {
+      "supported": true,
+      "level": "L4",
+      "notes": "Saving a file that had unsupported content requires Save As or explicit overwrite confirmation."
+    },
+    "saveAs": { "supported": true, "level": "L4" },
     "templates": { "supported": false }
   },
-  "roundTripLevel": "none",
+  "roundTripLevel": "L4",
   "macroPreservation": "not-applicable",
   "encryptionSupport": "unsupported",
   "digitalSignaturePreservation": "unsupported",
-  "knownLosses": ["Everything beyond format detection; the document model is not implemented."],
-  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "knownLosses": [
+    "Tables (cell text kept as paragraphs), images, drawings, embedded objects",
+    "Headers, footers, footnotes, endnotes, comments, fields, content controls",
+    "Numbering and bullets, fonts, colours, sizes, spacing, custom styles, sections",
+    "Tracked changes (insertions kept as plain text, deletions dropped)",
+    "Not validated against Microsoft Word (L5 requires an REA investigation)"
+  ],
+  "testCoverage": ["tools/format-detector/tests/detect.test.ts", "packages/office-formats/tests/formats.test.ts"],
   "reaInvestigations": [],
   "status": "experimental"
 }

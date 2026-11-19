@@ -5,19 +5,40 @@
   "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "capabilities": {
     "detect": { "supported": true, "level": "L0" },
-    "open": { "supported": false },
-    "inspect": { "supported": false },
-    "edit": { "supported": false },
-    "save": { "supported": false },
-    "saveAs": { "supported": false },
+    "open": {
+      "supported": true,
+      "level": "L2",
+      "notes": "Sheets, numbers, text, booleans, formulas (shared strings and inline strings)."
+    },
+    "inspect": { "supported": true, "level": "L1" },
+    "edit": {
+      "supported": true,
+      "level": "L3",
+      "notes": "Formula engine: arithmetic, comparison, &, ranges, cross-sheet refs, SUM, AVERAGE, MIN, MAX, COUNT, COUNTA, IF, AND, OR, NOT, ROUND, ABS, CONCAT, LEFT, RIGHT, MID, LEN, UPPER, LOWER."
+    },
+    "save": {
+      "supported": true,
+      "level": "L4",
+      "notes": "Cached results written; fullCalcOnLoad set so spreadsheet apps recalculate."
+    },
+    "saveAs": { "supported": true, "level": "L4" },
     "templates": { "supported": false }
   },
-  "roundTripLevel": "none",
+  "roundTripLevel": "L4",
   "macroPreservation": "not-applicable",
   "encryptionSupport": "unsupported",
   "digitalSignaturePreservation": "unsupported",
-  "knownLosses": ["Everything beyond format detection; no workbook model or formula engine exists yet."],
-  "testCoverage": ["tools/format-detector/tests/detect.test.ts"],
+  "knownLosses": [
+    "Cell formatting, number formats, column widths, merged cells, conditional formatting, data validation",
+    "Charts, images, tables, pivot tables, named ranges, hyperlinks, comments",
+    "Functions outside the list above evaluate to #NAME? in HyperSheet (formula text is kept)",
+    "Not validated against Microsoft Excel (L5 requires an REA investigation)"
+  ],
+  "testCoverage": [
+    "tools/format-detector/tests/detect.test.ts",
+    "packages/office-formats/tests/formats.test.ts",
+    "packages/office-formats/tests/engines.test.ts"
+  ],
   "reaInvestigations": [],
   "status": "experimental"
 }

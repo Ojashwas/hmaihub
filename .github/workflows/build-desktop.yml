@@ -2,14 +2,35 @@ name: Build desktop
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "apps/desktop/**"
+      - "packages/office-formats/**"
+      - "tools/format-detector/**"
 
 permissions:
   contents: read
 
 jobs:
-  not-implemented:
-    runs-on: ubuntu-latest
+  windows-installers:
+    runs-on: windows-latest
+    env:
+      HYPEROFFICE_RELEASE_DIR: ${{ github.workspace }}\release
     steps:
-      - run: |
-          echo "No desktop application exists yet (Tauri 2 shell is Phase 2+)." >&2
-          exit 1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @hyperoffice/desktop test
+      - name: Smoke test (all windows, editor and file round-trips)
+        run: pnpm --filter @hyperoffice/desktop smoke
+      - name: Build unsigned preview installers
+        run: pnpm --filter @hyperoffice/desktop package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hyperoffice-preview-installers
+          path: release/**/*.exe
+          retention-days: 14
