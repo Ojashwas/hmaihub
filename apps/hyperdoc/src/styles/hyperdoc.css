@@ -1,0 +1,42 @@
+.doc-scroller {
+  min-height: 100%;
+  padding: 24px 0 48px;
+}
+.doc-page {
+  width: 794px;
+  max-width: calc(100% - 32px);
+  min-height: 1123px;
+  margin: 0 auto;
+  padding: 72px 76px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.15);
+  line-height: 1.5;
+  font-size: 15px;
+  white-space: pre-wrap;
+  outline: none;
+}
+.doc-page p {
+  margin: 0 0 10px;
+}
+.doc-page h1 {
+  font-size: 36px;
+  font-weight: 400;
+  margin: 0 0 12px;
+}
+.doc-page h2 {
+  font-size: 22px;
+  margin: 18px 0 8px;
+}
+.doc-page h3 {
+  font-size: 17px;
+  margin: 14px 0 6px;
+}
+.fmt-b {
+  font-weight: 700;
+}
+.fmt-i {
+  font-style: italic;
+}
+.fmt-u {
+  text-decoration: underline;
+}

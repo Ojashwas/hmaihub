@@ -1,5 +1,5 @@
 import type { AnyModel } from "@hyperoffice/office-formats/models";
-import { PRODUCTS, type ProductId } from "../shared/products.ts";
+import { PRODUCTS, type ProductId } from "./products.ts";
 import { api, type OpenResult } from "./api.ts";
 
 type Attrs = Record<string, string | number | boolean | undefined>;

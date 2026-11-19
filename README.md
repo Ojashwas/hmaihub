@@ -6,17 +6,28 @@ HyperAI, and the HyperWorkspace shell.
 
 ## Project status
 
-**Pre-alpha preview.** Four preview editors and a suite launcher exist as an
-Electron desktop app ([apps/desktop](apps/desktop/README.md)). They handle a
-documented subset of each format. Do not use HyperOffice for real documents.
+**Pre-alpha preview.** Four preview editors and a suite launcher exist as
+desktop apps. They handle a documented subset of each format. Do not use
+HyperOffice for real documents.
+
+| App folder | Product |
+| --- | --- |
+| [apps/hyperoffice](apps/hyperoffice/README.md) | HyperOffice suite launcher |
+| [apps/hyperdoc](apps/hyperdoc/README.md) | HyperDoc — documents (.docx) |
+| [apps/hypersheet](apps/hypersheet/README.md) | HyperSheet — spreadsheets (.xlsx) |
+| [apps/hyperdeck](apps/hyperdeck/README.md) | HyperDeck — presentations (.pptx) |
+| [apps/hyperplan](apps/hyperplan/README.md) | HyperPlan — project plans (Project XML) |
+| [apps/shell](apps/shell/README.md) | Shared UI used by all apps |
+| [apps/desktop](apps/desktop/README.md) | Electron host and installer packaging |
+| [exe/](exe/README.md) | Final Windows installers (`*-Setup-0.1.0.exe`) |
 
 | Area | State |
 | --- | --- |
 | Monorepo, CI, ADRs, governance | In place |
 | Format detection (L0) | Implemented in `tools/format-detector` |
 | Preview engines (TypeScript) | `packages/office-formats`: DOCX/XLSX/PPTX/MSPDI subset, formula engine, CPM scheduler |
-| Desktop apps | HyperOffice launcher, HyperDoc, HyperSheet, HyperDeck, HyperPlan (Electron preview, [ADR-0006](docs/architecture/decisions/0006-electron-desktop-preview.md)) |
-| Windows installers | Build scripts and CI workflow ready; not built locally (see below) |
+| Desktop apps | Electron preview, [ADR-0006](docs/architecture/decisions/0006-electron-desktop-preview.md) |
+| Windows installers | Packaging writes to `exe/`; not built locally (Defender blocks the Electron runtime); CI workflow ready |
 | Document engines (Rust) | Not started; Rust toolchain not provisioned ([ADR-0003](docs/architecture/decisions/0003-rust-engines-deferred.md)) |
 | Licensing | L0 design + L1 implementation with development keys only; not enforced in the preview apps |
 

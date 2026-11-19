@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { inflateSync } from "node:zlib";
 import { InvalidModelError, validateModel } from "../src/main/validate.ts";
-import { editorForExtension, EDITORS, isProductId, PRODUCTS } from "../src/shared/products.ts";
+import { editorForExtension, EDITORS, isProductId, PRODUCTS } from "@hyperoffice/app-shell/products";
 import { productIcon } from "../scripts/icons.ts";
 
 describe("IPC model validation", () => {

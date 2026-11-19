@@ -4,11 +4,12 @@ import {
   computeWorkbook,
   formatValue,
   isError,
-  parseAddress,
-  parseLiteral
+  parseAddress
 } from "@hyperoffice/office-formats/formula";
-import type { CellModel, CellValue, WorkbookModel } from "@hyperoffice/office-formats/models";
-import { button, el, separator, wireDocumentCommands, type Shell } from "./shell.ts";
+import type { CellValue, WorkbookModel } from "@hyperoffice/office-formats/models";
+import { button, el, separator, wireDocumentCommands, type Shell } from "@hyperoffice/app-shell";
+import { cellInputText, parseCellInput } from "../cells/cell-input.ts";
+import "./hypersheet.css";
 
 const INVALID_NAME = /[[\]:*?/\\]/;
 
@@ -77,19 +78,6 @@ export function mountSheet(shell: Shell): void {
       commit(`=SUM(${addressKey({ col: sel.col, row: top })}:${addressKey({ col: sel.col, row: sel.row - 1 })})`);
     })
   );
-
-  const raw = (c: CellModel | undefined) =>
-    !c
-      ? ""
-      : c.f !== undefined
-        ? `=${c.f}`
-        : typeof c.v === "boolean"
-          ? c.v
-            ? "TRUE"
-            : "FALSE"
-          : c.v === undefined
-            ? ""
-            : String(c.v);
 
   function recalc() {
     values = computeWorkbook(wb).get(sheet().name) ?? new Map();
@@ -189,17 +177,16 @@ export function mountSheet(shell: Shell): void {
     td?.classList.add("selected");
     td?.scrollIntoView({ block: "nearest", inline: "nearest" });
     nameBox.value = key;
-    fx.value = raw(sheet().cells[key]);
+    fx.value = cellInputText(sheet().cells[key]);
     const v = values.get(key);
     cellInfo.textContent = `${sheet().name}!${key}${v !== undefined && v !== null ? ` = ${formatValue(v)}` : ""}`;
   }
 
   function commit(text: string) {
     const key = addressKey(sel);
-    const cells = sheet().cells;
-    if (text === "") sheet().cells = Object.fromEntries(Object.entries(cells).filter(([k]) => k !== key));
-    else if (text.startsWith("=") && text.length > 1) cells[key] = { f: text.slice(1) };
-    else cells[key] = { v: parseLiteral(text) };
+    const cell = parseCellInput(text);
+    if (cell) sheet().cells[key] = cell;
+    else sheet().cells = Object.fromEntries(Object.entries(sheet().cells).filter(([k]) => k !== key));
     markDirty();
     recalc();
     const before = { rows, cols };
@@ -251,7 +238,7 @@ export function mountSheet(shell: Shell): void {
       select(e.key === "Enter" ? { col: sel.col, row: sel.row + 1 } : { col: sel.col + 1, row: sel.row });
       grid.focus();
     } else if (e.key === "Escape") {
-      fx.value = raw(sheet().cells[addressKey(sel)]);
+      fx.value = cellInputText(sheet().cells[addressKey(sel)]);
       grid.focus();
     }
   });

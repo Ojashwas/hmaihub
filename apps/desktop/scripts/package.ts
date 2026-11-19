@@ -1,11 +1,12 @@
 // Packages one Windows installer per product with electron-builder.
-// Output: $HYPEROFFICE_RELEASE_DIR or ~/HyperOffice-release (kept outside synced folders on purpose).
-import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+// Final installers are copied to <repo>/exe (or $HYPEROFFICE_EXE_DIR); intermediates stay in
+// $HYPEROFFICE_RELEASE_DIR or ~/HyperOffice-release, outside synced folders.
+import { copyFileSync, cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Arch, build, Platform } from "electron-builder";
-import { PRODUCTS, type ProductId } from "../src/shared/products.ts";
+import { PRODUCTS, type ProductId } from "@hyperoffice/app-shell/products";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as {
@@ -14,10 +15,12 @@ const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as {
 };
 const electronVersion = pkg.devDependencies["electron"] as string;
 const releaseDir = process.env["HYPEROFFICE_RELEASE_DIR"] ?? join(homedir(), "HyperOffice-release");
+const exeDir = process.env["HYPEROFFICE_EXE_DIR"] ?? join(root, "../../exe");
 const only = process.argv.slice(2).filter((a) => !a.startsWith("-")) as ProductId[];
 const products = (only.length ? only : (Object.keys(PRODUCTS) as ProductId[])).filter((p) => p in PRODUCTS);
 
 mkdirSync(releaseDir, { recursive: true });
+mkdirSync(exeDir, { recursive: true });
 const artifacts: string[] = [];
 
 for (const id of products) {
@@ -77,7 +80,12 @@ for (const id of products) {
           : [{ ext: info.openExtensions, name: info.fileTypeName, description: info.fileTypeName, role: "Editor" }]
     }
   });
-  for (const f of files) if (f.endsWith(".exe")) artifacts.push(f);
+  for (const f of files) {
+    if (!f.endsWith(".exe")) continue;
+    const target = join(exeDir, basename(f));
+    copyFileSync(f, target);
+    artifacts.push(target);
+  }
   for (const entry of readdirSync(output))
     if (entry.endsWith("-unpacked")) rmSync(join(output, entry), { recursive: true, force: true });
 }

@@ -3,7 +3,7 @@ import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
-import { PRODUCTS, type ProductId } from "../src/shared/products.ts";
+import { PRODUCTS, type ProductId } from "@hyperoffice/app-shell/products";
 import { productIcon } from "./icons.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -39,8 +39,8 @@ await build({
   target: "chrome130",
   outfile: join(dist, "renderer/app.js")
 });
-for (const file of ["index.html", "styles.css"])
-  copyFileSync(join(root, "src/renderer", file), join(dist, "renderer", file));
+// Each app imports its own stylesheet; esbuild emits them together as renderer/app.css.
+copyFileSync(join(root, "src/renderer/index.html"), join(dist, "renderer/index.html"));
 
 const icons = join(root, "build/icons");
 mkdirSync(icons, { recursive: true });

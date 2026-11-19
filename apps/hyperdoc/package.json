@@ -1,0 +1,21 @@
+{
+  "name": "@hyperoffice/hyperdoc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HyperDoc word processor (preview).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@hyperoffice/app-shell": "workspace:*",
+    "@hyperoffice/office-formats": "workspace:*"
+  },
+  "hyperoffice": {
+    "status": "preview",
+    "owner": "@hyperoffice/apps"
+  }
+}

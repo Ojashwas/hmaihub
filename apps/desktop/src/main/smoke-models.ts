@@ -1,5 +1,5 @@
 import type { AnyModel } from "@hyperoffice/office-formats";
-import type { EditorId } from "../shared/products.ts";
+import type { EditorId } from "@hyperoffice/app-shell/products";
 
 /** Models exercised by the smoke test: editor DOM round-trip and file save/load round-trip. */
 export const SMOKE_MODELS: Record<EditorId, AnyModel> = {

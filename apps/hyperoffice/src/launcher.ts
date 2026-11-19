@@ -1,8 +1,6 @@
-import { PRODUCTS } from "../shared/products.ts";
-import { api, type AppInfo } from "./api.ts";
-import { el, type Shell } from "./shell.ts";
-
-const GLYPH: Record<string, string> = { hyperdoc: "¶", hypersheet: "▦", hyperdeck: "▭", hyperplan: "▤" };
+import { api, el, PRODUCTS, type AppInfo, type Shell } from "@hyperoffice/app-shell";
+import "./launcher.css";
+import { TILE_GLYPHS } from "./tiles.ts";
 
 export function mountLauncher(shell: Shell, info: AppInfo): void {
   shell.toolbar.remove();
@@ -12,7 +10,7 @@ export function mountLauncher(shell: Shell, info: AppInfo): void {
     const tile = el(
       "button",
       { type: "button", class: "tile", style: `--tile:rgb(${r} ${g} ${b})`, "aria-label": `Open ${p.name}` },
-      el("span", { class: "tile-icon", "aria-hidden": "true", text: GLYPH[id] ?? "" }),
+      el("span", { class: "tile-icon", "aria-hidden": "true", text: TILE_GLYPHS[id] }),
       el("strong", { text: p.name }),
       el("span", { text: p.description })
     );

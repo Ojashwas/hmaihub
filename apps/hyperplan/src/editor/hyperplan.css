@@ -1,0 +1,149 @@
+.content-hyperplan {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.plan-header {
+  display: flex;
+  gap: 24px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.plan-header input {
+  font: inherit;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.plan-name {
+  width: 260px;
+}
+.plan-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.task-pane {
+  flex: 0 0 auto;
+  max-width: 62%;
+  overflow: auto;
+  background: #fff;
+  border-right: 1px solid var(--line);
+}
+.task-table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.task-table th,
+.task-table td {
+  height: 30px;
+  padding: 0 6px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  text-align: start;
+}
+.task-table th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+  color: var(--muted);
+  font-weight: 500;
+}
+.task-table input {
+  width: 100%;
+  min-width: 60px;
+  padding: 3px 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font: inherit;
+  background: transparent;
+}
+.task-table input:hover,
+.task-table input:focus {
+  border-color: var(--line);
+  background: #fff;
+}
+.task-table td:nth-child(2) input {
+  min-width: 180px;
+}
+.task-table td.narrow input {
+  width: 64px;
+}
+.task-table tr.critical td:first-child {
+  box-shadow: inset 3px 0 var(--critical);
+}
+.task-table button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+.swatch.critical {
+  background: var(--critical);
+}
+.gantt {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+.gantt-canvas {
+  position: relative;
+  min-height: 100%;
+  background-image: repeating-linear-gradient(to right, transparent 0 129px, var(--line) 129px 130px);
+}
+.gantt-row {
+  position: relative;
+  height: 30px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.gantt-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--line);
+}
+.gantt-tick {
+  position: absolute;
+  top: 7px;
+  padding-left: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.gantt-bar {
+  position: absolute;
+  top: 8px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+.gantt-bar.critical {
+  background: var(--critical);
+}
+.gantt-bar.milestone {
+  width: 14px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.gantt-slack {
+  position: absolute;
+  top: 13px;
+  height: 4px;
+  background: repeating-linear-gradient(to right, #cbd5e1 0 4px, transparent 4px 8px);
+}

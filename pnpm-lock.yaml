@@ -205,9 +205,27 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
       '@hyperoffice/format-detector':
         specifier: workspace:*
         version: link:../../tools/format-detector
+      '@hyperoffice/hyperdeck':
+        specifier: workspace:*
+        version: link:../hyperdeck
+      '@hyperoffice/hyperdoc':
+        specifier: workspace:*
+        version: link:../hyperdoc
+      '@hyperoffice/hyperoffice':
+        specifier: workspace:*
+        version: link:../hyperoffice
+      '@hyperoffice/hyperplan':
+        specifier: workspace:*
+        version: link:../hyperplan
+      '@hyperoffice/hypersheet':
+        specifier: workspace:*
+        version: link:../hypersheet
       '@hyperoffice/office-formats':
         specifier: workspace:*
         version: link:../../packages/office-formats
@@ -221,6 +239,54 @@ importers:
       esbuild:
         specifier: 0.28.2
         version: 0.28.2
+
+  apps/hyperdeck:
+    dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
+      '@hyperoffice/office-formats':
+        specifier: workspace:*
+        version: link:../../packages/office-formats
+
+  apps/hyperdoc:
+    dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
+      '@hyperoffice/office-formats':
+        specifier: workspace:*
+        version: link:../../packages/office-formats
+
+  apps/hyperoffice:
+    dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
+
+  apps/hyperplan:
+    dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
+      '@hyperoffice/office-formats':
+        specifier: workspace:*
+        version: link:../../packages/office-formats
+
+  apps/hypersheet:
+    dependencies:
+      '@hyperoffice/app-shell':
+        specifier: workspace:*
+        version: link:../shell
+      '@hyperoffice/office-formats':
+        specifier: workspace:*
+        version: link:../../packages/office-formats
+
+  apps/shell:
+    dependencies:
+      '@hyperoffice/office-formats':
+        specifier: workspace:*
+        version: link:../../packages/office-formats
 
   packages/entitlement-sdk:
     dependencies:

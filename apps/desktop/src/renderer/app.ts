@@ -1,10 +1,9 @@
-import { api } from "./api.ts";
-import { mountDeck } from "./deck.ts";
-import { mountDoc } from "./doc.ts";
-import { mountLauncher } from "./launcher.ts";
-import { mountPlan } from "./plan.ts";
-import { mountSheet } from "./sheet.ts";
-import { enableTestHooks, mountShell } from "./shell.ts";
+import { api, enableTestHooks, mountShell } from "@hyperoffice/app-shell";
+import { mountDeck } from "@hyperoffice/hyperdeck";
+import { mountDoc } from "@hyperoffice/hyperdoc";
+import { mountLauncher } from "@hyperoffice/hyperoffice";
+import { mountPlan } from "@hyperoffice/hyperplan";
+import { mountSheet } from "@hyperoffice/hypersheet";
 
 async function start() {
   const info = await api().info();

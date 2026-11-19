@@ -1,5 +1,5 @@
 import { deflateSync, crc32 } from "node:zlib";
-import type { ProductId } from "../src/shared/products.ts";
+import type { ProductId } from "@hyperoffice/app-shell/products";
 
 const SIZE = 256;
 

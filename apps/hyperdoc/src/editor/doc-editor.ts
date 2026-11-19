@@ -1,12 +1,12 @@
 import type { Alignment, DocumentModel, Paragraph, ParagraphStyle, TextRun } from "@hyperoffice/office-formats/models";
-import { button, el, separator, wireDocumentCommands, type Shell } from "./shell.ts";
+import { button, el, separator, wireDocumentCommands, type Shell } from "@hyperoffice/app-shell";
+import { pushRun, type Fmt } from "../document/runs.ts";
+import "../styles/hyperdoc.css";
 
 const STYLE_TAG: Record<ParagraphStyle, string> = { Normal: "p", Title: "h1", Heading1: "h2", Heading2: "h3" };
 const TAG_STYLE: Record<string, ParagraphStyle> = { P: "Normal", H1: "Title", H2: "Heading1", H3: "Heading2" };
 const BLOCKS = new Set(["P", "H1", "H2", "H3", "H4", "H5", "H6", "DIV", "LI", "BLOCKQUOTE", "PRE"]);
 const ALIGN_CSS: Record<Alignment, string> = { left: "", center: "center", right: "right", both: "justify" };
-
-type Fmt = Omit<TextRun, "text">;
 
 function paragraphToBlock(p: Paragraph): HTMLElement {
   const block = document.createElement(STYLE_TAG[p.style]);
@@ -55,21 +55,6 @@ function collectRuns(node: Node, fmt: Fmt, runs: TextRun[], block: HTMLElement):
       } else collectRuns(child, formatOf(child, fmt), runs, block);
     }
   }
-}
-
-function pushRun(runs: TextRun[], text: string, fmt: Fmt): void {
-  if (!text) return;
-  const last = runs[runs.length - 1];
-  const same =
-    last && !!last.bold === !!fmt.bold && !!last.italic === !!fmt.italic && !!last.underline === !!fmt.underline;
-  if (last && same) last.text += text;
-  else
-    runs.push({
-      text,
-      ...(fmt.bold ? { bold: true } : {}),
-      ...(fmt.italic ? { italic: true } : {}),
-      ...(fmt.underline ? { underline: true } : {})
-    });
 }
 
 function blockToParagraph(block: HTMLElement): Paragraph {

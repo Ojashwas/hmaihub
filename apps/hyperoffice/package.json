@@ -1,0 +1,20 @@
+{
+  "name": "@hyperoffice/hyperoffice",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HyperOffice suite launcher.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@hyperoffice/app-shell": "workspace:*"
+  },
+  "hyperoffice": {
+    "status": "preview",
+    "owner": "@hyperoffice/apps"
+  }
+}

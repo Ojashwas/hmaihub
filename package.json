@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "tsc -p tsconfig.json && tsc -p apps/desktop/tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.apps.json",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
     "rea": "npx --yes rea-agents@6.9.0"
   },

@@ -1,0 +1,21 @@
+{
+  "name": "@hyperoffice/app-shell",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared desktop UI shell: product catalogue, preload API types, toolbar/status chrome, and document commands.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./products": "./src/products.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@hyperoffice/office-formats": "workspace:*"
+  },
+  "hyperoffice": {
+    "status": "preview",
+    "owner": "@hyperoffice/apps"
+  }
+}

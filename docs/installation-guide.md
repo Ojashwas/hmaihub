@@ -135,14 +135,15 @@ pnpm --filter @hyperoffice/desktop package        # all products
 pnpm --filter @hyperoffice/desktop package hyperdoc hypersheet   # selected products
 ```
 
-Output (default `%USERPROFILE%\HyperOffice-release`, override with `HYPEROFFICE_RELEASE_DIR`):
+Final installers are copied to the repository's `exe/` folder (override with
+`HYPEROFFICE_EXE_DIR`); build intermediates go to `%USERPROFILE%\HyperOffice-release`:
 
 ```
-HyperOffice-release\suite\HyperOffice-Setup-0.1.0.exe
-HyperOffice-release\hyperdoc\HyperDoc-Setup-0.1.0.exe
-HyperOffice-release\hypersheet\HyperSheet-Setup-0.1.0.exe
-HyperOffice-release\hyperdeck\HyperDeck-Setup-0.1.0.exe
-HyperOffice-release\hyperplan\HyperPlan-Setup-0.1.0.exe
+exe\HyperOffice-Setup-0.1.0.exe
+exe\HyperDoc-Setup-0.1.0.exe
+exe\HyperSheet-Setup-0.1.0.exe
+exe\HyperDeck-Setup-0.1.0.exe
+exe\HyperPlan-Setup-0.1.0.exe
 ```
 
 Each installer is per-user (no administrator rights), lets the user choose the
@@ -157,9 +158,10 @@ and the packaging on `windows-latest`, and uploads the installers as the
 
 Microsoft Defender detected the official Electron 45.4.1 runtime
 (`node_modules\.pnpm\electron@45.4.1…\electron\dist\electron.exe`) as
-`Trojan:Win32/Cinjo.O!cl` on 2026-11-19 and blocks every read of the file. The
+`Trojan:Win32/Cinjo.O!cl` on 2026-11-19, blocked it, and has since removed the
+file from `node_modules`. The
 `!cl` suffix indicates a cloud machine-learning verdict. Nothing was excluded,
-disabled, or bypassed. To proceed, choose one:
+disabled, bypassed, or re-downloaded. To proceed, choose one:
 
 1. Ask your security team to review the detection and, if they confirm a false
    positive, submit it to Microsoft and restore/allow the file.

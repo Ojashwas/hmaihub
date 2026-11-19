@@ -14,7 +14,13 @@
     "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
+    "@hyperoffice/app-shell": "workspace:*",
     "@hyperoffice/format-detector": "workspace:*",
+    "@hyperoffice/hyperdeck": "workspace:*",
+    "@hyperoffice/hyperdoc": "workspace:*",
+    "@hyperoffice/hyperoffice": "workspace:*",
+    "@hyperoffice/hyperplan": "workspace:*",
+    "@hyperoffice/hypersheet": "workspace:*",
     "@hyperoffice/office-formats": "workspace:*"
   },
   "devDependencies": {

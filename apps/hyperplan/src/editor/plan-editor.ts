@@ -5,7 +5,9 @@ import {
   scheduleProject,
   type ScheduleResult
 } from "@hyperoffice/office-formats/schedule";
-import { button, el, separator, wireDocumentCommands, type Shell } from "./shell.ts";
+import { button, el, separator, wireDocumentCommands, type Shell } from "@hyperoffice/app-shell";
+import { parsePredecessors } from "../tasks/predecessors.ts";
+import "./hyperplan.css";
 
 const DAY_PX = 26;
 
@@ -74,18 +76,6 @@ export function mountPlan(shell: Shell): void {
     renderAll();
   });
 
-  function parsePreds(text: string): number[] {
-    return [
-      ...new Set(
-        text
-          .split(/[,;\s]+/)
-          .filter(Boolean)
-          .map(Number)
-          .filter((n) => Number.isInteger(n) && n > 0)
-      )
-    ];
-  }
-
   function cellInput(task: PlanTask, field: "name" | "durationDays" | "predecessors"): HTMLInputElement {
     const value = field === "predecessors" ? task.predecessors.join(", ") : String(task[field]);
     const input = el("input", {
@@ -96,7 +86,7 @@ export function mountPlan(shell: Shell): void {
     input.addEventListener("change", () => {
       if (field === "name") task.name = input.value;
       else if (field === "durationDays") task.durationDays = Math.max(0, Math.round(Number(input.value) || 0));
-      else task.predecessors = parsePreds(input.value).filter((p) => p !== task.uid);
+      else task.predecessors = parsePredecessors(input.value, task.uid);
       markDirty();
       renderAll();
     });

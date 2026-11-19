@@ -1,5 +1,7 @@
 import type { PresentationModel, SlideModel } from "@hyperoffice/office-formats/models";
-import { button, el, separator, wireDocumentCommands, type Shell } from "./shell.ts";
+import { button, el, separator, wireDocumentCommands, type Shell } from "@hyperoffice/app-shell";
+import { emptySlide, moveSlide, removeSlide, toggleRtl } from "../slides/slides.ts";
+import "./hyperdeck.css";
 
 export function mountDeck(shell: Shell): void {
   let model: PresentationModel = newModel();
@@ -54,7 +56,7 @@ export function mountDeck(shell: Shell): void {
     button(
       "+ Slide",
       "New slide",
-      edit(() => model.slides.splice(++current, 0, { title: "", bullets: [] }))
+      edit(() => model.slides.splice(++current, 0, emptySlide()))
     ),
     button(
       "Duplicate",
@@ -65,40 +67,28 @@ export function mountDeck(shell: Shell): void {
       "Delete",
       "Delete slide",
       edit(() => {
-        if (model.slides.length === 1) model.slides[0] = { title: "", bullets: [] };
-        else {
-          model.slides.splice(current, 1);
-          current = Math.min(current, model.slides.length - 1);
-        }
+        current = removeSlide(model.slides, current);
       })
     ),
     button(
       "▲",
       "Move slide up",
       edit(() => {
-        if (current === 0) return;
-        model.slides.splice(current - 1, 0, ...model.slides.splice(current, 1));
-        current--;
+        current = moveSlide(model.slides, current, -1);
       })
     ),
     button(
       "▼",
       "Move slide down",
       edit(() => {
-        if (current >= model.slides.length - 1) return;
-        model.slides.splice(current + 1, 0, ...model.slides.splice(current, 1));
-        current++;
+        current = moveSlide(model.slides, current, 1);
       })
     ),
     separator(),
     button(
       "⇄ RTL",
       "Toggle right-to-left slide",
-      edit(() => {
-        const s = slide();
-        if (s.rtl) delete s.rtl;
-        else s.rtl = true;
-      })
+      edit(() => toggleRtl(slide()))
     ),
     separator(),
     button("▶ Present", "Present from current slide (F5)", () => present())

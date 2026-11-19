@@ -1,5 +1,5 @@
 import type { AnyModel } from "@hyperoffice/office-formats/models";
-import type { EditorId, ProductId } from "../shared/products.ts";
+import type { EditorId, ProductId } from "./products.ts";
 
 export interface OpenResult {
   name: string;

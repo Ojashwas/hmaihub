@@ -12,7 +12,7 @@ import {
   type MenuItemConstructorOptions
 } from "electron";
 import { loadFile, saveFile, type LoadResult, type ModelKind } from "@hyperoffice/office-formats";
-import { EDITORS, editorForExtension, isProductId, PRODUCTS, type ProductId } from "../shared/products.ts";
+import { EDITORS, editorForExtension, isProductId, PRODUCTS, type ProductId } from "@hyperoffice/app-shell/products";
 import { canonicalJson, SMOKE_MODELS } from "./smoke-models.ts";
 import { validateModel } from "./validate.ts";
 

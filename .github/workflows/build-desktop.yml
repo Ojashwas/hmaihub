@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - "apps/desktop/**"
+      - "apps/**"
       - "packages/office-formats/**"
       - "tools/format-detector/**"
 
@@ -32,5 +32,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: hyperoffice-preview-installers
-          path: release/**/*.exe
+          path: exe/*.exe
           retention-days: 14
