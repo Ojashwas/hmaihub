@@ -21,6 +21,7 @@ service's business logic, and the documents below.
 
 | Document | Audience | Purpose |
 | --- | --- | --- |
+| [Pending work and handover](pending.md) | Whoever continues the work | Move to another machine, build installers, test checklist, open items |
 | [Installation Guide](installation-guide.md) | Developers, testers | Prerequisites, install, verify, run, troubleshoot |
 | [User Guide (developer & operator)](user-guide.md) | Developers, QA, licensing operators | Day-to-day use of the tools and libraries |
 | [End-User Guide](end-user-guide.md) | Customers | What to expect from HyperOffice licensing; product UI not yet built |
