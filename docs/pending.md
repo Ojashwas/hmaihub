@@ -25,12 +25,37 @@ commit the updated file.
 ### Rules to keep (agreed during development)
 
 1. **Do not bypass security controls.** If antivirus flags a file, stop and get a security review. No exclusions or disabling protection without approval.
-2. **Do not reverse-engineer Microsoft Office binaries.** Work from public specifications (ECMA-376, MS-OI29500, MSPDI). REA (`rea-agents@6.9.0`) is only for authorised investigations recorded under `research/rea/investigations/`.
 3. **No compatibility claim above L4** in `compatibility/manifests/*.json` without an REA investigation and a reviewed report. The schema test enforces this.
 4. **No production signing keys** in the repository or on developer machines. Development keys live in `.dev-keys/` (git-ignored).
 5. **Report only what was actually run.** Update `docs/test-report.md` with real results.
 6. **Customer files are never held hostage**: open, copy, and export must always work, whatever the licence state.
 7. Commit after each completed item with a Conventional Commit message (`feat(...)`, `fix(...)`, `docs(...)`, `test(...)`).
+8. Follow the Microsoft legal and brand guidance below for all compatibility work, naming, and marketing text.
+
+### Microsoft legal and brand guidance (checked 2026-11-19; confirm current text with legal counsel)
+
+**Open Specification Promise** — <https://learn.microsoft.com/openspecs/dev_center/ms-devcentlp/1c24c7c8-28b0-4ce1-a47d-95fe1ff504bc>
+
+- Microsoft promises not to assert its necessary patent claims against implementations that **conform to covered specifications** (required portions only).
+- Covered and relevant to HyperOffice: Office Open XML ECMA-376 and ISO/IEC 29500 (2008/2012/2016), implementer notes [MS-OE376] and [MS-OI29500], [MS-DOCX], [MS-XLSX], [MS-PPTX], [MS-ODRAWXML], [MS-OFFMACRO]/[MS-OFFMACRO2], [MS-DOC], [MS-XLS], [MS-XLSB], [MS-PPT], [MS-ODRAW], [MS-OFFCRYPTO], [MS-OVBA], [MS-OSHARED], [MS-CFB], RTF, and OpenDocument 1.0–1.3.
+- **Not found** in the covered list on 2026-11-19: Microsoft Project formats (Project XML/MSPDI schema, `.mpp`). Get a legal review before extending HyperPlan beyond the current MSPDI subset, and before any `.mpp` work.
+- The promise is not a guarantee against third-party patents; it is personal and lost if you sue Microsoft over the same specification.
+
+**Trademark and Brand Guidelines** — <https://www.microsoft.com/legal/intellectualproperty/trademarks>
+
+- Allowed: truthful compatibility statements in text, using the mark as an adjective — “HyperDoc opens and saves Word documents”, “works with Excel spreadsheets”.
+- Required: a trademark footnote where marks are used, e.g. “Microsoft, Excel, PowerPoint, and Word are trademarks of the Microsoft group of companies.”
+- Not allowed without a licence: Microsoft names in product names, domains, or company names (no “HyperWord”, “Excel Pro”, etc.); Microsoft logos, product icons, designs, trade dress, or screenshots of Microsoft products in our app, store listings, or marketing; implying affiliation or endorsement; using marks as nouns/verbs or more prominently than our own brand.
+- App listings, icons, screenshots, and descriptions must be unique to HyperOffice.
+
+**Microsoft product licence terms (Office, Project)**
+
+- Office licence terms restrict reverse engineering, decompiling, and disassembling except where applicable law permits it. Do **not** run REA (or any tool) against Office or Project binaries, processes, or services without written legal approval for that specific activity.
+- Permitted research pattern: black-box observation of **files** you create with properly licensed Office — save a baseline, change one thing, save again, compare the package XML and rendering. Record the licence used in each investigation's `authorization.md`.
+- Do not copy Microsoft UI layouts, icons, fonts, templates, clip art, help text, or sample documents into HyperOffice. Referencing a font name inside a document (e.g. `Calibri`) is fine; bundling Microsoft fonts is not.
+- Microsoft Open Specifications documents carry their own intellectual-property notices; cite them, do not copy large passages.
+
+Tasks P-21 and P-22 below apply this guidance.
 
 ### Machine-specific lessons from the first machine
 
@@ -44,7 +69,8 @@ commit the updated file.
 
 Copy this into the assistant (for example GitHub Copilot agent mode) with the repository open:
 
-> Read `docs/pending.md` in full and follow its rules in section 0. Work through
+> Read `docs/pending.md` in full and follow its rules and the Microsoft legal and
+> brand guidance in section 0. Work through
 > sections 1–8 in order, then the task cards in section 9 in the order given by
 > "Suggested order". Before each task, read the files listed in its card. After
 > each task, run `pnpm check`, update the checkboxes and status in
@@ -237,6 +263,8 @@ Status key: ☐ open · ◐ partly done
 | P-18 | Accessibility testing (axe-core, screen reader) of the apps | ☐ | `apps/*` | WCAG 2.2 AA target |
 | P-19 | Update `docs/test-report.md` with results from this checklist | ☐ | `docs/test-report.md` | Last full report predates the app restructure |
 | P-20 | Licensing security review and external penetration test | ☐ | `docs/licensing/security-test-plan.md` | Before any production code issuance |
+| P-21 | Complete the REA investigation programme for all four products | ☐ | `research/rea/investigations/` | Black-box file investigations only, within the legal guidance in §0 |
+| P-22 | Close gaps with HyperOffice's own, more advanced implementations | ☐ | `packages/office-formats`, `apps/*` | Clean-room, standards-based, interoperable first; differentiate beyond the originals |
 
 Full backlogs: [architecture/backlog.md](architecture/backlog.md) ·
 [licensing/implementation-backlog.md](licensing/implementation-backlog.md) ·
@@ -245,7 +273,7 @@ Full backlogs: [architecture/backlog.md](architecture/backlog.md) ·
 ### Suggested order
 
 1. P-04 → P-02 → P-01 (or P-07 if building in CI) → P-19
-2. P-03 (needs licensed Office) → P-05 (needs authorisation) → update manifests
+2. P-03 (needs licensed Office) → P-05 / P-21 (needs authorisation) → update manifests → P-22 for every gap found
 3. P-08 → P-09
 4. P-12 decision, then P-11 or P-06
 5. P-14, P-15, P-18 (feature work)
@@ -329,6 +357,38 @@ Full backlogs: [architecture/backlog.md](architecture/backlog.md) ·
 
 #### P-20 Licensing security review
 - Follow `docs/licensing/security-test-plan.md`; external penetration test; no open critical/high findings before production.
+
+#### P-21 Complete the REA investigation programme
+- Read: §0 legal guidance, `research/rea/README.md`, `docs/research/rea-version.md`, `docs/standards/README.md`, the product's manifest in `compatibility/manifests/`.
+- Needs: properly licensed Word, Excel, PowerPoint, and Project on a dedicated reference machine; written authorisation per investigation; a named reviewer. REA pinned at `rea-agents@6.9.0` (`pnpm rea`).
+- Method (every investigation): one narrow question → minimal baseline file saved by the Office app → exactly one change → save → compare parts, XML, relationships, rendering with REA's file/package inspection → separate observations from assumptions → cite the public specification section → write `expected-behavior.json` → add a test in `packages/office-formats/tests` that uses it → reviewer approval. Never analyse Office binaries or processes (see §0).
+- Minimum programme (mark each ☐ → ☑ when approved):
+
+  | Product | Feature IDs |
+  | --- | --- |
+  | HyperDoc | ☐ HDOC-PARA-001 paragraph styles and outline levels · ☐ HDOC-RUN-001 run formatting (b/i/u, size, colour, fonts) · ☐ HDOC-LIST-001 numbering and bullets · ☐ HDOC-TABLE-001 tables and merged cells · ☐ HDOC-IMAGE-001 inline/anchored images · ☐ HDOC-HF-001 headers, footers, page numbers · ☐ HDOC-SECT-001 sections and page setup · ☐ HDOC-TRACK-001 tracked changes · ☐ HDOC-COMMENT-001 comments · ☐ HDOC-FIELD-001 fields and TOC · ☐ HDOC-BIDI-001 Arabic/mixed-direction text |
+  | HyperSheet | ☐ HSHEET-CELL-001 value types and shared strings · ☐ HSHEET-FORMULA-001 formula storage and cached values · ☐ HSHEET-FUNC-001 function behaviour matrix (start with the 21 implemented) · ☐ HSHEET-CALC-001 calcChain and recalculation flags · ☐ HSHEET-STYLE-001 styles and number formats · ☐ HSHEET-NAME-001 defined names · ☐ HSHEET-MERGE-001 merged cells · ☐ HSHEET-CF-001 conditional formatting · ☐ HSHEET-DV-001 data validation · ☐ HSHEET-TABLE-001 tables · ☐ HSHEET-CHART-001 charts (preservation) · ☐ HSHEET-PIVOT-001 pivot preservation |
+  | HyperDeck | ☐ HDECK-PKG-001 minimal valid package (master/layout/theme) · ☐ HDECK-PH-001 placeholders and inheritance · ☐ HDECK-TEXT-001 text formatting and bullet levels · ☐ HDECK-IMAGE-001 pictures · ☐ HDECK-SHAPE-001 shapes and groups · ☐ HDECK-TABLE-001 tables · ☐ HDECK-NOTES-001 speaker notes · ☐ HDECK-TRANS-001 transitions/animations (preservation) · ☐ HDECK-BIDI-001 RTL slides |
+  | HyperPlan | ☐ HPLAN-TASK-001 tasks, WBS, summary tasks · ☐ HPLAN-DEPENDENCY-001 FS/SS/FF/SF links with lag · ☐ HPLAN-CAL-001 calendars and exceptions · ☐ HPLAN-RES-001 resources and assignments · ☐ HPLAN-BASE-001 baselines · ☐ HPLAN-CF-001 custom fields · ☐ HPLAN-CONSTRAINT-001 constraints and deadlines (legal review first — Project formats are not covered by the Open Specification Promise) |
+
+- Done when: each investigation folder is complete and approved, linked tests pass, and the manifest's `reaInvestigations`, `compatibilityReport`, and `roundTripLevel` are updated (L5 only with automated Office round-trip evidence).
+
+#### P-22 Close gaps with HyperOffice's own, more advanced implementations
+- Trigger: an investigation (P-21), an Office validation (P-03), or a known-loss entry shows a feature HyperOffice lacks, or the public specification is silent or ambiguous.
+- Approach (clean-room): implement from the public specification and approved evidence only; never from Microsoft code, binaries, UI, or assets. Design our own UI and behaviour; record each significant design in an ADR under `docs/architecture/decisions/`.
+- Interoperability first: files saved by HyperOffice must stay valid and open in Microsoft Office and LibreOffice. Store HyperOffice-only information in standard extension points that other apps safely ignore (OOXML `extLst` entries with our own namespace, custom XML parts, document properties) and never in a way that breaks the file.
+- Go beyond the originals where it serves users. Candidate differentiators (each needs a PRD, design, tests, and accessibility review):
+
+  | Product | Advanced capabilities to design |
+  | --- | --- |
+  | All | First-class Arabic/RTL and mixed-direction editing; WCAG 2.2 AA throughout; offline-first with conflict-free collaboration; per-change audit trail and version diff; opt-in, provider-neutral AI with preview/diff/accept/undo (never silent edits); hostile-file safety report on open; open formats (ODF, PDF/UA) as first-class outputs |
+  | HyperDoc | Live accessibility and plain-language checker; structure-aware AI rewrite that keeps styles and tracked changes; semantic document outline with reorder; citation and reference validation |
+  | HyperSheet | Formula dependency graph view and “explain this formula”; deterministic, auditable recalculation with change impact preview; typed tables with validation; data-cleaning and anomaly detection; formula lint (volatile functions, broken ranges) |
+  | HyperDeck | Brand-compliance and visual-density checker; outline-to-slides generation with editable output; reading-order and alt-text assistant; RTL-aware layouts |
+  | HyperPlan | Schedule risk and float analysis with explanations; what-if scenarios side by side; resource-levelling preview; earned-value dashboard; delay root-cause narrative from actual progress |
+
+- Marketing and UI text must follow the brand guidance in §0 (compatibility statements only; no Microsoft names in feature names; trademark footnote).
+- Done when (per capability): ADR approved, implementation with unit/property tests, file round-trip still valid in Office (P-03 procedure), accessibility checked, manifest/known-loss lists updated, and the feature listed in `docs/functional-specification.md`.
 
 ## 10. Troubleshooting
 
